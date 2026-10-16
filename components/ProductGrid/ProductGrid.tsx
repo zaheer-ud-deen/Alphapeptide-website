@@ -26,7 +26,7 @@ export default function ProductGrid() {
       name: 'Retatrutide',
       price: '$145.00 - $1160',
       badge: 'BEST SELLER',
-      image: '/Retatrutide.png' // Your temporary dummy image
+      image: '/Retatrutide.png' 
     },
     {
       id: 2,
@@ -99,7 +99,7 @@ export default function ProductGrid() {
                 src={product.image} 
                 alt={product.name}
                 fill
-                // ADDED mix-blend-lighten HERE:
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-contain relative z-10 mix-blend-lighten" 
               />
             </div>

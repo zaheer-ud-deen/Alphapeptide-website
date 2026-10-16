@@ -226,6 +226,7 @@ export default function CategoryTabs() {
             <Image 
               src={currentData.imageSrc} 
               alt={currentData.label} 
+             
               fill
               className="object-contain object-center drop-shadow-2xl z-10"
               sizes="(max-width: 1024px) 100vw, 50vw"

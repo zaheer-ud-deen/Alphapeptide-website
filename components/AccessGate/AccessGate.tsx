@@ -21,7 +21,8 @@ export default function AccessGate() {
         src="/EarthBgImage.png"
         alt="Earth Background"
         fill
-        priority
+        sizes="(max-width: 768px) 100vw, 33vw"
+         
         className="object-cover object-center z-0"
       />
 
@@ -38,8 +39,9 @@ export default function AccessGate() {
              <Image
               src="/mainLogoTrasperent.png"
               alt="Alpha Peptide Logo"
+              sizes="(max-width: 768px) 100vw, 33vw"
               fill
-              priority
+               
               className="object-contain"
             />
           </div>
@@ -94,7 +96,7 @@ export default function AccessGate() {
               alt="Canadian Flag"
               width={20}
               height={20}
-              priority
+               
               className="object-contain w-4 h-4 md:w-5 md:h-5"
             />
             <span>Canadian</span>

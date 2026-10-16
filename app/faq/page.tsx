@@ -129,8 +129,9 @@ export default function FAQPage() {
                 src="/heroLogo.png" 
                 alt="Alpha Peptide Hero Logo" 
                 fill 
+                sizes="(max-width: 768px) 100vw, 33vw"
                 className="object-contain object-right"
-                priority
+                 
               />
             </div>
           </div>

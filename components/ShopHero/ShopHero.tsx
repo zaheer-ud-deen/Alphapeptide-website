@@ -45,7 +45,8 @@ export default function ShopHero({ initialCategory = 'all' }: { initialCategory?
           <Image
             src="/shophero.png"
             alt="Research compounds"
-            priority
+             
+            sizes="(max-width: 768px) 100vw, 33vw"
             fill
             className="object-contain object-right"
           />
@@ -112,6 +113,7 @@ export default function ShopHero({ initialCategory = 'all' }: { initialCategory?
                       <Image 
                         src={cat.iconSrc} 
                         alt={`${cat.label} Icon`}
+                      
                         fill
                         className="object-contain drop-shadow-lg"
                         sizes="(max-width: 768px) 32px, 40px"

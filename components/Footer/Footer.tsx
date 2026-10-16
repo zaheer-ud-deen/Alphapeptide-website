@@ -22,6 +22,7 @@ export default function Footer() {
               <Image 
                 src="/footerlogo.png"
                 alt="Alpha Peptide"
+                sizes="(max-width: 768px) 100vw, 33vw"
                 fill
                 className="object-contain object-left"
               />
@@ -37,6 +38,7 @@ export default function Footer() {
                 <Image 
                   src="/redleaf.png"
                   alt="Canadian"
+                  sizes="(max-width: 768px) 100vw, 33vw"
                   fill
                   className="object-contain"
                 />

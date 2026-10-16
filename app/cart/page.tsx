@@ -42,7 +42,8 @@ export default function CartPage() {
             src="/checkoutbg.png" 
             alt="Earth Background" 
             fill 
-            priority
+             
+            sizes="(max-width: 768px) 100vw, 75vw"
             className="object-cover object-right md:object-right-top opacity-90 mix-blend-lighten" 
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent z-10"></div>
@@ -280,7 +281,7 @@ export default function CartPage() {
                     <CreditCard size={18} className="text-gray-300" />
                   </div>
                   <div className="h-8 w-10 bg-neutral-900 border border-white/10 rounded flex items-center justify-center relative overflow-hidden p-1">
-                    <Image src="/Blogo.png" alt="Bitcoin Logo" fill className="object-contain p-1" />
+                    <Image src="/Blogo.png" alt="Bitcoin Logo" fill sizes="(max-width: 768px) 100vw, 33vw" className="object-contain p-1" />
                   </div>
                   <div className="h-8 px-3 bg-neutral-900 border border-white/10 rounded flex items-center justify-center text-[10px] font-medium text-gray-300">
                     e-Transfer

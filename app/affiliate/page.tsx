@@ -8,29 +8,60 @@ import Navbar from '../../components/Navbar/Navbar'; // Adjust path if necessary
 import HowItWorks from '../../components/HowItWorks/HowItWorks'; // Adjust path if necessary
 import Footer from '../../components/Footer/Footer'; // Adjust path if necessary
 
+
 export default function AffiliatePage() {
   const [status, setStatus] = useState<string>('');
+  // 1. Add Honeypot state
+  const [honeypot, setHoneypot] = useState<string>('');
 
   const submitToGoogleSheet = async (e: React.FormEvent<HTMLFormElement>, formType: string) => {
     e.preventDefault();
+
+    // 2. HONEYPOT CHECK: If bot filled this, silently ignore
+    if (honeypot !== '') {
+      console.log('Bot detected, silently rejecting.');
+      return; 
+    }
+
+    // 3. RATE LIMIT CHECK: Prevent multiple submissions within 30 seconds
+    const lastSubmitTime = localStorage.getItem('lastFormSubmit');
+    const now = Date.now();
+    if (lastSubmitTime && (now - parseInt(lastSubmitTime)) < 30000) {
+      setStatus('Please wait 30 seconds before submitting again.');
+      setTimeout(() => setStatus(''), 3000);
+      return;
+    }
+
     setStatus('Sending...');
     
-    // Replace this with the URL you copied from Apps Script!
-    const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbz4PeVtu6LWZrc8vGUcqvYiwsuhvurOS41isXOTpWt462DKVlBiANiQQ5o0O6FNpTDuFQ/exec'; 
+    // 4. USE ENVIRONMENT VARIABLE
+    const WEBHOOK_URL = process.env.NEXT_PUBLIC_SHEETS_WEBHOOK_URL; 
+    
+    if (!WEBHOOK_URL) {
+      console.error('Webhook URL is missing from .env.local');
+      setStatus('Error. Try again.');
+      return;
+    }
 
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
     data.formType = formType; // Tells the script which tab to use
 
     try {
-      await fetch(WEBHOOK_URL, {
+      const response = await fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
         body: JSON.stringify(data),
       });
-      setStatus('Success!');
-      (e.target as HTMLFormElement).reset(); // Clear the form
-      setTimeout(() => setStatus(''), 3000); // Reset button text after 3s
+
+      if (response.ok) {
+        setStatus('Success!');
+        localStorage.setItem('lastFormSubmit', now.toString()); // Save success time
+        (e.target as HTMLFormElement).reset(); // Clear the form
+        setTimeout(() => setStatus(''), 3000); // Reset button text after 3s
+      } else {
+        throw new Error('Network response was not ok.');
+      }
     } catch (error) {
       console.error(error);
       setStatus('Error. Try again.');
@@ -50,8 +81,9 @@ export default function AffiliatePage() {
           <Image 
             src="/bg001.png" 
             alt="Affiliate Hero Background" 
+            sizes="(max-width: 768px) 100vw, 33vw"
             fill 
-            priority
+             
             className="object-cover object-right md:object-right-top opacity-90 mix-blend-lighten" 
           />
           {/* Gradient overlay to smoothly blend its left edge into the pitch-black background */}
@@ -89,6 +121,17 @@ export default function AffiliatePage() {
           <div className="lg:col-span-7 bg-[#050505] border border-white/10 rounded-xl p-6 md:p-8">
             <form onSubmit={(e) => submitToGoogleSheet(e, 'Affiliate')} className="space-y-5">
               
+              {/* 5. ADD THE HONEYPOT FIELD */}
+              <input 
+                type="text" 
+                name="website_url_catch" 
+                style={{ display: 'none' }} 
+                tabIndex={-1} 
+                autoComplete="off"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+              />
+
               <div>
                 <label className="block text-xs font-medium text-gray-400 mb-2 cursor-pointer">Username*</label>
                 <input type="text" name="username" className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:border-[#B98135] focus:outline-none transition-colors" required />

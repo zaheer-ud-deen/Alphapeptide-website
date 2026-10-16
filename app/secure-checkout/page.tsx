@@ -10,7 +10,7 @@ import CheckoutHero from '@/components/Checkout/CheckoutHero';
 
 export default function SecureCheckoutPage() {
   const router = useRouter();
-  const { cartItems, subtotal } = useCart();
+  const { cartItems, subtotal, formattedTime } = useCart(); // Pull formattedTime from global context
   const [selectedMethod, setSelectedMethod] = useState<'etransfer' | 'btc'>('etransfer');
   
   // Shipping logic based on cart rules
@@ -34,8 +34,8 @@ export default function SecureCheckoutPage() {
   return (
     <div className="min-h-screen bg-[#030303] text-white font-sans flex flex-col">
       
-      {/* Reusable Hero Component (Set to Step 1: Information) */}
-      <CheckoutHero currentStep={1} />
+      {/* Reusable Hero Component with Global Timer Passed Down */}
+      <CheckoutHero currentStep={1} timer={formattedTime} />
 
       {/* Main Checkout Content */}
       <main className="flex-1 w-full max-w-[1240px] mx-auto px-4 md:px-12 py-8 md:py-16">
@@ -77,14 +77,15 @@ export default function SecureCheckoutPage() {
                     onChange={() => setSelectedMethod('etransfer')}
                     className="w-4 h-4 accent-[#B98135] cursor-pointer" 
                   />
-                 <div className="relative w-12 h-8 shrink-0 flex items-center justify-center overflow-hidden">
-             <Image 
-                src="/image 71.png" 
-              alt="Interac e-Transfer" 
-             fill 
-            className="object-contain"
-             />
-</div>
+                  <div className="relative w-12 h-8 shrink-0 flex items-center justify-center overflow-hidden">
+                    <Image 
+                      src="/image 71.png" 
+                      alt="Interac e-Transfer" 
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      fill 
+                      className="object-contain"
+                    />
+                  </div>
                   <div className="flex-1">
                     <span className="block text-sm font-bold text-[#B98135]">Interac e-Transfer</span>
                     <span className="block text-[11px] text-gray-400 mt-0.5">Pay securely via Interac e-Transfer.<br/>Payment instructions shown after checkout.</span>
@@ -113,7 +114,7 @@ export default function SecureCheckoutPage() {
               {/* Action Button */}
               <button 
                 onClick={handlePayNow}
-                className="w-full mt-8 py-4 bg-gradient-to-r from-[#94590D] to-[#B77D33] hover:from-[#B77D33] hover:to-[#94590D] text-white text-sm font-bold tracking-widest uppercase rounded flex items-center justify-center gap-2 transition-all cursor-pointer cursor-pointer"
+                className="w-full mt-8 py-4 bg-gradient-to-r from-[#94590D] to-[#B77D33] hover:from-[#B77D33] hover:to-[#94590D] text-white text-sm font-bold tracking-widest uppercase rounded flex items-center justify-center gap-2 transition-all cursor-pointer"
               >
                 <Lock size={16} /> PAY NOW
               </button>
@@ -148,7 +149,7 @@ export default function SecureCheckoutPage() {
                 {cartItems.map((item) => (
                   <div key={item.id} className="flex gap-4 items-center">
                     <div className="relative w-12 h-12 bg-black rounded border border-white/10 shrink-0">
-                      <Image src={item.image} alt={item.name} fill className="object-contain p-1" />
+                      <Image src={item.image} alt={item.name} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-contain p-1" />
                     </div>
                     <div className="flex-1">
                       <h4 className="text-xs font-semibold text-white">{item.name}</h4>

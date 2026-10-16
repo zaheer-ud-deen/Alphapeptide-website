@@ -6,18 +6,54 @@ import Link from 'next/link';
 import { Clock } from 'lucide-react';
 
 interface CheckoutHeroProps {
-  currentStep: number; // 1: Information, 2: Shipping, 3: Payment, 4: Confirmation
+  currentStep: number;
 }
 
 export default function CheckoutHero({ currentStep }: CheckoutHeroProps) {
-  // 15 minute countdown timer logic
-  const [timeLeft, setTimeLeft] = useState(14 * 60 + 59); // 14:59 in seconds
+  // Persistent Timer State using global localStorage
+  const [timeLeft, setTimeLeft] = useState<number>(900);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
+    const TIMER_DURATION = 15 * 60; // 15 minutes in seconds
+    const storageKey = 'global_checkout_timer_expiry';
+    
+    const now = Date.now();
+    const storedExpiry = localStorage.getItem(storageKey);
+
+    let expiryTime: number;
+
+    if (storedExpiry) {
+      expiryTime = parseInt(storedExpiry, 10);
+      // If stored expiry has already passed, reset a new 15-minute window
+      if (expiryTime <= now) {
+        expiryTime = now + TIMER_DURATION * 1000;
+        localStorage.setItem(storageKey, expiryTime.toString());
+      }
+    } else {
+      // Initialize global timer if it doesn't exist yet
+      expiryTime = now + TIMER_DURATION * 1000;
+      localStorage.setItem(storageKey, expiryTime.toString());
+    }
+
+    // Calculate initial remaining time
+    const remainingSeconds = Math.max(0, Math.floor((expiryTime - now) / 1000));
+    setTimeLeft(remainingSeconds);
+
+    // Interval to tick every second
+    const interval = setInterval(() => {
+      const currentTime = Date.now();
+      const left = Math.max(0, Math.floor((expiryTime - currentTime) / 1000));
+      
+      setTimeLeft(left);
+
+      if (left === 0) {
+        const newExpiry = Date.now() + TIMER_DURATION * 1000;
+        localStorage.setItem(storageKey, newExpiry.toString());
+        expiryTime = newExpiry;
+      }
     }, 1000);
-    return () => clearInterval(timer);
+
+    return () => clearInterval(interval);
   }, []);
 
   const formatTime = (seconds: number) => {
@@ -26,7 +62,6 @@ export default function CheckoutHero({ currentStep }: CheckoutHeroProps) {
     return `${m}:${s < 10 ? '0' : ''}${s}`;
   };
 
-  // Replace these image paths with your actual icon files inside the public/ directory
   const steps = [
     { num: 1, title: 'Information', iconSrc: '/eva_file-text-outline.png' },
     { num: 2, title: 'Shipping', iconSrc: '/hugeicons_shipping-truck-01.png' },
@@ -40,13 +75,12 @@ export default function CheckoutHero({ currentStep }: CheckoutHeroProps) {
       {/* Background Earth/Space Image */}
       <div className="absolute inset-0 z-0 opacity-40">
         <Image 
-          src="/checkoutbg.png" // Add your earth image to the public folder
+          src="/checkoutbg.png" 
           alt="Secure Checkout Background"
+          sizes="(max-width: 768px) 100vw, 33vw"
           fill
           className="object-contain object-center"
-          priority
         />
-        {/* <div className="absolute inset-0 bg-gradient-to-b from-[#030303]/60 via-transparent to-[#030303]"></div> */}
       </div>
 
       <div className="relative z-10 w-full max-w-[1240px] mx-auto px-6 md:px-12">

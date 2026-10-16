@@ -79,6 +79,7 @@ export default function BitcoinPaymentPage() {
               <Image 
                 src="/bi_qr-code.png" 
                 alt="Bitcoin Payment QR Code" 
+                sizes="(max-width: 768px) 100vw, 33vw"
                 fill 
                 className="object-contain"
                 onError={(e) => {

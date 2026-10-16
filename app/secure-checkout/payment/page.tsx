@@ -47,6 +47,7 @@ export default function InteracPaymentPage() {
              <Image 
                    src="/image 71.png" 
                    alt="Interac e-Transfer" 
+                   sizes="(max-width: 768px) 100vw, 33vw"
                    fill 
                    className="object-contain"
                 />
@@ -162,7 +163,7 @@ export default function InteracPaymentPage() {
                 {cartItems.map((item) => (
                   <div key={item.id} className="flex gap-4 items-center">
                     <div className="relative w-12 h-12 bg-black rounded border border-white/10 shrink-0">
-                      <Image src={item.image} alt={item.name} fill className="object-contain p-1" />
+                      <Image src={item.image} alt={item.name} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-contain p-1" />
                     </div>
                     <div className="flex-1">
                       <h4 className="text-xs font-semibold text-white">{item.name}</h4>

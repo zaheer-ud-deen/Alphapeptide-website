@@ -8,7 +8,6 @@ import {
   ChevronDown, 
   LayoutGrid, 
   List as ListIcon, 
-  ShoppingCart, 
   Clock,
   ChevronLeft,
   ChevronRight,
@@ -37,9 +36,6 @@ const products = [
   { id: 13, name: '5-AMINO-1MQ', slug: '5-amino-1mq', categoryId: 'core-metabolic', subtitle: '10MG | 99% Purity', price: '$90.00', numericPrice: 90.00, image: '/p13.png', badge: null, status: 'coming_soon', sales: 0, dateAdded: '2024-03-02' },
   { id: 14, name: 'TIRZEPATIDE', slug: 'tirzepatide', categoryId: 'core-metabolic', subtitle: '30MG | 99% Purity', price: '$90.00', numericPrice: 90.00, image: '/p14.png', badge: null, status: 'coming_soon', sales: 0, dateAdded: '2024-03-03' },
   { id: 15, name: 'CJC-1295 w/DAC', slug: 'cjc-1295-w-dac', categoryId: 'endocrine-growth', subtitle: '5MG | 99% Purity', price: '$90.00', numericPrice: 90.00, image: '/p15.png', badge: null, status: 'coming_soon', sales: 0, dateAdded: '2024-03-04' },
-  // { id: 17, name: 'SYRINGES', slug: 'syringes', categoryId: 'accessories', subtitle: '100 PACK', price: '$15.00', numericPrice: 15.00, image: '/syringes.png', badge: null, status: 'available', sales: 0, dateAdded: '2024-03-06' },
-  // { id: 18, name: 'PREP PADS', slug: 'prep-pads', categoryId: 'accessories', subtitle: '100 PACK', price: '$5.00', numericPrice: 5.00, image: '/prep-pads.png', badge: null, status: 'available', sales: 0, dateAdded: '2024-03-07' },
-  // { id: 19, name: 'VIAL CAPS', slug: 'vial-caps', categoryId: 'accessories', subtitle: 'VARIOUS COLORS', price: '$2.00', numericPrice: 2.00, image: '/vial-caps.png', badge: null, status: 'available', sales: 0, dateAdded: '2024-03-08' }
 ];
 
 const sortOptions = [
@@ -57,7 +53,6 @@ export default function ShopGrid({ categorySlug = 'all' }: { categorySlug?: stri
   const [activeSort, setActiveSort] = useState(sortOptions[0]);
   
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { addToCart } = useCart();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -149,6 +144,7 @@ export default function ShopGrid({ categorySlug = 'all' }: { categorySlug?: stri
                   <Image 
                     src={product.image} 
                     alt={product.name} 
+                    sizes="(max-width: 768px) 100vw, 33vw"
                     fill 
                     className="object-contain relative z-10 mix-blend-lighten" 
                   />
@@ -168,12 +164,13 @@ export default function ShopGrid({ categorySlug = 'all' }: { categorySlug?: stri
 
                   <div className={viewMode === 'grid' ? 'w-full flex justify-center' : 'w-48'}>
                     {product.status === 'available' ? (
-                      <button 
-                        onClick={() => addToCart({ name: product.name, price: product.numericPrice, image: product.image })} 
+                      /* FIXED: Replaced button with Link for direct routing */
+                      <Link 
+                        href={`/research-catalog/${product.categoryId}/${product.slug}`}
                         className="cursor-pointer py-1 px-5 flex items-center justify-center gap-2 border border-[#B77D33] group-hover:border-[#B98135] group-hover:text-[#B98135] rounded-[4px] text-sm tracking-widest transition-all duration-300 text-white"
                       >
                         View Details <ArrowUpRight size={16} strokeWidth={1.5} />
-                      </button>
+                      </Link>
                     ) : (
                       <button disabled className="cursor-not-allowed py-1 px-5 flex items-center justify-center gap-2 border border-white/5 rounded-[4px] bg-[#030303]/50 text-gray-600 text-sm tracking-widest">
                         <Clock size={14} /> Coming Soon

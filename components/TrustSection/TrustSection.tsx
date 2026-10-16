@@ -63,6 +63,7 @@ export default function TrustSection() {
   <Image
     src="/whyusbg.png"
     alt="Lab Vials and Equipment"
+    sizes="(max-width: 768px) 100vw, 33vw"
     fill
     className="object-cover"
   />
