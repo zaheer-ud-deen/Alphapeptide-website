@@ -3,16 +3,18 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useCart } from '../../context/CartContext';
+
 import { Lock, CreditCard, Truck } from 'lucide-react';
 import Footer from '../../components/Footer/Footer';
 import { useRouter } from 'next/navigation';
+import { useCart } from '../../context/CartContext';
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { cartItems, subtotal } = useCart();
-  const [shippingMethod, setShippingMethod] = useState<'free' | 'flat'>('free');
+  const { cartItems, subtotal, formattedTime } = useCart();
   
+  const [shippingMethod, setShippingMethod] = useState<'free' | 'flat'>('free');
+
   // Shipping calculations
   const shippingCost = shippingMethod === 'flat' ? 20.00 : 0.00;
   const estimatedTotal = subtotal + shippingCost;
@@ -34,7 +36,7 @@ export default function CheckoutPage() {
             src="/checkoutbg.png" 
             alt="Earth Background" 
             fill 
-            priority
+            sizes="(max-width: 768px) 100vw, 33vw"
             className="object-cover object-right md:object-right-top opacity-90 mix-blend-lighten" 
           />
           {/* Gradient overlay inside the image wrapper to seamlessly blend its left edge into the pitch-black background */}
@@ -42,24 +44,32 @@ export default function CheckoutPage() {
         </div>
         
         {/* Text Content */}
-        <div className="max-w-[1440px] mx-auto relative z-20 w-full px-6 md:px-12">
-          {/* Breadcrumbs */}
-          <div className="text-[12px] font-medium mb-3 flex items-center gap-2">
-            <Link href="/" className="text-gray-300 hover:text-white transition-colors">Home</Link>
-            <span className="text-[#B98135]">›</span>
-            <span className="text-[#B98135]">Shopping Cart</span>
+        <div className="max-w-[1440px] mx-auto relative z-20 w-full px-6 md:px-12 flex justify-between items-center">
+          <div>
+            {/* Breadcrumbs */}
+            <div className="text-[12px] font-medium mb-3 flex items-center gap-2">
+              <Link href="/" className="text-gray-300 hover:text-white transition-colors">Home</Link>
+              <span className="text-[#B98135]">›</span>
+              <span className="text-[#B98135]">Shopping Cart</span>
+            </div>
+            
+            {/* Main Heading */}
+            <h1 className="text-3xl md:text-4xl lg:text-[48px] font-medium tracking-wide mb-3 text-white">
+              Shopping Cart
+            </h1>
+            
+            {/* Description */}
+            <p className="text-gray-300 text-sm max-w-sm leading-relaxed">
+              Review your selected items before purchase.<br/>
+              Enjoy a seamless shopping experience.
+            </p>
           </div>
-          
-          {/* Main Heading */}
-          <h1 className="text-3xl md:text-4xl lg:text-[48px] font-medium tracking-wide mb-3 text-white">
-            Shopping Cart
-          </h1>
-          
-          {/* Description */}
-          <p className="text-gray-300 text-sm max-w-sm leading-relaxed">
-            Review your selected items before purchase.<br/>
-            Enjoy a seamless shopping experience.
-          </p>
+
+          {/* Persistent Timer Badge */}
+          <div className="hidden md:flex items-center gap-2 border border-white/10 bg-black/60 backdrop-blur px-4 py-2 rounded-lg text-sm text-[#B98135]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span className="font-mono font-medium tracking-wider">{formattedTime}</span>
+          </div>
         </div>
       </div>
 
@@ -99,7 +109,6 @@ export default function CheckoutPage() {
                 <label className="block text-xs font-medium text-gray-300 mb-2">Country / Region*</label>
                 <select className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:border-[#B98135] focus:outline-none transition-colors">
                   <option value="Canada">Canada</option>
-                  
                 </select>
               </div>
 
@@ -163,12 +172,10 @@ export default function CheckoutPage() {
             {/* Free Shipping Progress Bar */}
             <div className="pb-2">
               <div className="w-full h-1.5 bg-[#1a1a1a] rounded-full relative mb-4">
-                {/* Yellow filled progress */}
                 <div 
                   className="h-full bg-[#B98135] transition-all duration-500 rounded-full"
                   style={{ width: `${progressPercent}%` }}
                 ></div>
-                {/* Truck Icon Circle */}
                 <div 
                   className="absolute top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-[#070707] border border-[#B98135] flex items-center justify-center text-[#B98135]"
                   style={{ left: `calc(${progressPercent}% - 12px)` }}
@@ -262,12 +269,12 @@ export default function CheckoutPage() {
                   <CreditCard size={18} className="text-gray-300" />
                 </div>
                 
-                {/* Replaced text badge with Blogo.png image */}
                 <div className="h-8 w-10 bg-neutral-900 border border-white/10 rounded flex items-center justify-center relative overflow-hidden p-1">
                   <Image 
                     src="/Blogo.png" 
                     alt="Bitcoin Logo" 
                     fill 
+                    sizes="(max-width: 768px) 100vw, 33vw"
                     className="object-contain p-1"
                   />
                 </div>
@@ -279,12 +286,12 @@ export default function CheckoutPage() {
             </div>
 
             {/* Proceed Button */}
-         <button 
-        onClick={() => router.push('/secure-checkout')}
-          className="w-full py-4 bg-black/55 border-2 border-[#94590D] hover:opacity-90 text-white text-xs font-semibold tracking-[0.2em] rounded-lg uppercase flex items-center justify-center gap-2 transition-all cursor-pointer"
-           >
-  <Lock size={14} /> Proceed To Secure Checkout
-</button>
+            <button 
+              onClick={() => router.push('/secure-checkout')}
+              className="w-full py-4 bg-black/55 border-2 border-[#94590D] hover:opacity-90 text-white text-xs font-semibold tracking-[0.2em] rounded-lg uppercase flex items-center justify-center gap-2 transition-all cursor-pointer"
+            >
+              <Lock size={14} /> Proceed To Secure Checkout
+            </button>
 
           </div>
         </div>

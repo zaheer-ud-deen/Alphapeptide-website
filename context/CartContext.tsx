@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 export interface CartItem {
   id: number;
@@ -20,15 +20,74 @@ interface CartContextType {
   addToCart: (product?: { name?: string; price?: number; image?: string }) => void;
   updateQuantity: (id: number, quantity: number) => void;
   removeItem: (id: number) => void;
+  formattedTime: string; // Global checkout timer
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    // { id: 1, name: 'BPC-157', price: 59.99, quantity: 1, image: '/BPC-157.png' }
-  ]);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
+  const [isInitialized, setIsInitialized] = useState(false);
+  
+  // Global Timer State (15 minutes = 900 seconds)
+  const [timeLeft, setTimeLeft] = useState<number>(900);
+
+  // 1. Load cart & global timer from localStorage when the app starts
+  useEffect(() => {
+    const savedCart = localStorage.getItem('alphaPeptideCart');
+    if (savedCart) {
+      try {
+        setCartItems(JSON.parse(savedCart));
+      } catch (error) {
+        console.error('Failed to load cart from local storage', error);
+      }
+    }
+    setIsInitialized(true);
+
+    // Global Checkout Timer Logic
+    const TIMER_DURATION = 15 * 60; // 15 minutes
+    const storageKey = 'global_checkout_timer_expiry';
+    const now = Date.now();
+    const storedExpiry = localStorage.getItem(storageKey);
+
+    let expiryTime: number;
+
+    if (storedExpiry) {
+      expiryTime = parseInt(storedExpiry, 10);
+      if (expiryTime <= now) {
+        expiryTime = now + TIMER_DURATION * 1000;
+        localStorage.setItem(storageKey, expiryTime.toString());
+      }
+    } else {
+      expiryTime = now + TIMER_DURATION * 1000;
+      localStorage.setItem(storageKey, expiryTime.toString());
+    }
+
+    const remainingSeconds = Math.max(0, Math.floor((expiryTime - now) / 1000));
+    setTimeLeft(remainingSeconds);
+
+    const interval = setInterval(() => {
+      const currentTime = Date.now();
+      const left = Math.max(0, Math.floor((expiryTime - currentTime) / 1000));
+      setTimeLeft(left);
+
+      if (left === 0) {
+        const newExpiry = Date.now() + TIMER_DURATION * 1000;
+        localStorage.setItem(storageKey, newExpiry.toString());
+        expiryTime = newExpiry;
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // 2. Save cart to localStorage every time cartItems changes
+  useEffect(() => {
+    if (isInitialized) {
+      localStorage.setItem('alphaPeptideCart', JSON.stringify(cartItems));
+    }
+  }, [cartItems, isInitialized]);
 
   const toggleCart = () => {
     setIsCartOpen((prev) => !prev);
@@ -53,7 +112,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         image: product?.image || '/BPC-157.png'
       }];
     });
-    setIsCartOpen(true); // Automatically slide open the drawer when an item is added
+    setIsCartOpen(true); 
   };
 
   const updateQuantity = (id: number, quantity: number) => {
@@ -73,6 +132,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
   const subtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
+  // Format seconds into MM:SS
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+  const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
   return (
     <CartContext.Provider 
       value={{ 
@@ -84,7 +148,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         toggleCart, 
         addToCart, 
         updateQuantity, 
-        removeItem 
+        removeItem,
+        formattedTime
       }}
     >
       {children}

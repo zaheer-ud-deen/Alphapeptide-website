@@ -67,7 +67,7 @@ export default function HeroSection() {
             src="/HeroLogo.png"
             alt="Alpha Peptide Logo"
             fill
-            priority
+             
             sizes="(max-width: 1024px) 280px, 380px"
             className="object-contain object-top"
           />

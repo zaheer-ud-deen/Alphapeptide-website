@@ -12,7 +12,7 @@ export default function PaymentConfirmPage() {
 
   return (
     <div className="min-h-screen bg-[#030303] text-white font-sans flex flex-col">
-      <Navbar />
+      
 
       {/* Reusable Checkout Hero (Set to Step 3: Payment) */}
       <CheckoutHero currentStep={3} />

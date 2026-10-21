@@ -52,6 +52,7 @@ export default function CompoundDetailPage({ params }: { params: Promise<{ compo
           src={compoundData.bgImage} 
           alt="Background Glow" 
           fill 
+          sizes="(max-width: 768px) 100vw, 33vw"
           className="object-cover object-center opacity-40 blur-[40px] scale-110" 
         />
         
@@ -61,7 +62,8 @@ export default function CompoundDetailPage({ params }: { params: Promise<{ compo
             src={compoundData.bgImage} 
             alt={compoundData.title} 
             fill 
-            priority
+            sizes="(max-width: 768px) 100vw, 33vw"
+             
             className="object-contain object-center" 
           />
         </div>
@@ -116,6 +118,7 @@ export default function CompoundDetailPage({ params }: { params: Promise<{ compo
               src={compoundData.leftHexImage} 
               alt="Hex Graphics" 
               fill 
+              sizes="(max-width: 768px) 100vw, 33vw"
               className="object-contain object-left-bottom"
             />
           </div>

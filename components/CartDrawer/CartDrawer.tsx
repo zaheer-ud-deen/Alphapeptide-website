@@ -89,6 +89,7 @@ export default function CartDrawer() {
                     <Image 
                       src={item.image} 
                       alt={item.name} 
+                      sizes="(max-width: 768px) 100vw, 33vw"
                       fill 
                       className="object-contain p-1"
                     />

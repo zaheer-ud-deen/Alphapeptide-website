@@ -78,8 +78,9 @@ switch (slug) {
                     src={data.bgImage} 
                     alt={data.title} 
                     fill 
+                    sizes="(max-width: 768px) 100vw, 33vw"
                     className="object-contain object-right md:object-right" 
-                    priority
+                     
                   />
                 )}
                 {/* Gradient overlay to make text readable */}

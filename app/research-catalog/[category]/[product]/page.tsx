@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { 
   ArrowUpRight, 
   ArrowRight,
@@ -220,7 +222,7 @@ const productsData: Record<string, any> = {
     categoryLabel: 'METABOLIC IMMUNITY RESEARCH',
     categorySlug: 'metabolic-immunity',
     description: 'SS-31 is a novel mitochondrial-targeted research compound studied for its potential to support mitochondrial function, reduce oxidative stress, and optimize metabolic and immune health.',
-    image: '/33428534.png', // Replace with your SS-31 bottle image
+    image: '/33428534.png', 
     strength: '10MG',
     purity: '10MG | 99% Purity',
     packSizes: [
@@ -262,7 +264,7 @@ const productsData: Record<string, any> = {
     categoryLabel: 'LONGEVITY & REGENERATION',
     categorySlug: 'longevity-regeneration',
     description: 'BPC-157 is a pentadecapeptide studied for its potential to support tissue repair, gut health, inflammation reduction, and overall cellular recovery.',
-    image: '/bpc157.png', // Replace with your BPC-157 bottle image
+    image: '/bpc157.png', 
     strength: '10MG',
     purity: '10MG | 99% Purity',
     packSizes: [
@@ -340,13 +342,13 @@ const productsData: Record<string, any> = {
       { name: 'GHK-Cu', slug: 'ghk-cu', categorySlug: 'longevity-regeneration', subtitle: '10MG | 99% Purity', image: '/p6.png' }
     ]
   },
-  'selank': {
+'selank': {
     name: 'SELANK',
     tagline: 'RESEARCH COMPOUND',
     categoryLabel: 'NEURO COGNITIVE RESEARCH',
     categorySlug: 'neuro-cognitive',
     description: 'Selank is a synthetic regulatory peptide studied for its potential anxiolytic properties, supporting emotional balance, and cognitive function.',
-    image: '/selank.png', // Replace with your SELANK bottle image
+    image: '/selank.png', 
     strength: '10MG',
     purity: '10MG | 99% Purity',
     packSizes: [
@@ -569,7 +571,8 @@ export default function ProductDetail() {
               }
               alt="Category Background"
               fill
-              priority
+              sizes="(max-width: 768px) 100vw, 33vw"
+               
               className="object-cover object-center opacity-85"
             />
             
@@ -693,36 +696,9 @@ export default function ProductDetail() {
             {/* Product Hero Info & Image */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
               <div>
-                {/* <h4 className="text-[#B98135] text-[10px] uppercase tracking-widest font-bold mb-2">{product.categoryLabel}</h4> */}
                 <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-3 uppercase">{product.name}</h1>
                 <p className="text-[#B98135] text-[11px] uppercase tracking-widest font-bold mb-6">{product.tagline}</p>
                 
-                {/* <p className="text-gray-300 text-sm md:text-[15px] leading-relaxed max-w-lg mb-10">
-                  {product.description}
-                </p> */}
-
-                {/* Features */}
-                {/* <div className="flex items-start gap-8 md:gap-12 mb-10">
-                  <div className="flex flex-col items-center gap-3">
-                    <div className="w-12 h-12 rounded-full border border-[#B98135]/40 flex items-center justify-center bg-[#B98135]/5">
-                      <Crosshair size={18} className="text-[#B98135]" />
-                    </div>
-                    <span className="text-[10px] text-gray-300 tracking-wider">Appetite Control</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-3">
-                    <div className="w-12 h-12 rounded-full border border-[#B98135]/40 flex items-center justify-center bg-[#B98135]/5">
-                      <BarChart2 size={18} className="text-[#B98135]" />
-                    </div>
-                    <span className="text-[10px] text-gray-300 tracking-wider">Lean Mass Support</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-3">
-                    <div className="w-12 h-12 rounded-full border border-[#B98135]/40 flex items-center justify-center bg-[#B98135]/5">
-                      <RefreshCw size={18} className="text-[#B98135]" />
-                    </div>
-                    <span className="text-[10px] text-gray-300 tracking-wider">Metabolic Efficiency</span>
-                  </div>
-                </div> */}
-
                 <button className="flex items-center gap-3 px-6 py-3 border border-white/20 rounded text-gray-300 text-[10px] font-bold tracking-widest uppercase hover:bg-white/5 transition-colors cursor-pointer">
                   VIEW BATCH DOCUMENTATION <ArrowUpRight size={14} />
                 </button>
@@ -734,6 +710,7 @@ export default function ProductDetail() {
                   src={product.image} 
                   alt={product.name}
                   fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-contain drop-shadow-2xl z-10"
                 />
               </div>
@@ -794,8 +771,15 @@ export default function ProductDetail() {
                     </button>
                   </div>
                   
+                  {/* UPDATED ADD TO CART BUTTON WITH TOAST NOTIFICATION */}
                   <button 
-                    onClick={() => addToCart({ name: `${product.name} ${product.strength}`, price: activePack.numericPrice, image: product.image })}
+                    onClick={() => {
+                      addToCart({ name: `${product.name} ${product.strength}`, price: activePack.numericPrice, image: product.image });
+                      toast.success(`${product.name} added to cart!`, {
+                        position: "top-right",
+                        theme: "dark",
+                      });
+                    }}
                     className="flex-grow xl:flex-grow-0 flex items-center justify-center gap-3 px-10 h-12 bg-[#B98135] text-black text-[11px] font-bold tracking-widest uppercase rounded shadow-[0_0_20px_rgba(185,129,53,0.2)] hover:bg-[#c99145] transition-colors cursor-pointer"
                   >
                     <ShoppingCart size={16} /> ADD TO CART
@@ -828,7 +812,7 @@ export default function ProductDetail() {
                     >
                       {/* Bottle image */}
                       <div className="relative w-20 h-36 flex-shrink-0">
-                        <Image src={rel.image} alt={rel.name} fill className="object-contain" />
+                        <Image src={rel.image} alt={rel.name} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-contain" />
                       </div>
 
                       {/* Info */}
@@ -1021,6 +1005,8 @@ export default function ProductDetail() {
           </div>
         </div>
       </div>
+      
+      <ToastContainer />
       <Footer />
     </div>
   );

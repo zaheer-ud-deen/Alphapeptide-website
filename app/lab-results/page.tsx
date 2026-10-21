@@ -93,7 +93,8 @@ export default function LabResultsPage() {
                 src="/heroimg222.png" 
                 alt="COA Archive Background" 
                 fill 
-                priority
+                sizes="(max-width: 768px) 100vw, 33vw"
+                 
                 className="object-contain object-center " 
               />
               {/* Softer gradient so the image is visible all the way to the dividing line */}

@@ -77,7 +77,8 @@ export default function ResearchVaultPage() {
             src="/research-hero.png" 
             alt="Research Vault Background" 
             fill 
-            priority
+            sizes="(max-width: 768px) 100vw, 33vw"
+             
             className="object-cover object-center md:object-cover " 
           />
           
@@ -136,7 +137,7 @@ export default function ResearchVaultPage() {
               {researchLibrary.map((item, index) => (
                 <div key={index} className="min-w-[200px] w-[200px] md:min-w-[220px] md:w-[220px] shrink-0 bg-[#070707] border border-white/10 rounded-lg overflow-hidden flex flex-col">
                   <div className="relative h-[220px] w-full bg-[#0a0a0a]">
-                    <Image src={item.image} alt={item.name} fill className="object-cover opacity-90" />
+                    <Image src={item.image} alt={item.name} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover opacity-90" />
                   </div>
                   <div className="p-4 flex flex-col flex-1 justify-between">
                     <div className="mb-4">
@@ -186,7 +187,7 @@ export default function ResearchVaultPage() {
                   className="min-w-[200px] w-[200px] md:min-w-[220px] md:w-[220px] shrink-0 bg-[#070707] border border-white/10 rounded-lg overflow-hidden flex flex-col hover:border-[#B98135] transition-colors cursor-pointer"
                 >
                   <div className="relative h-[220px] w-full bg-[#0a0a0a]">
-                    <Image src={item.image} alt={item.name} fill className="object-cover" />
+                    <Image src={item.image} alt={item.name} sizes="(max-width: 768px) 100vw, 33vw" fill className="object-cover" />
                   </div>
                   <div className="p-4 flex flex-col flex-1 justify-center items-center text-center">
                     <h3 className="text-sm font-bold text-white mb-1 uppercase tracking-wider">{item.name}</h3>
@@ -228,7 +229,7 @@ export default function ResearchVaultPage() {
               {researchArticles.map((article, index) => (
                 <Link key={index} href={`/research/articles/${article.slug}`} className="min-w-[280px] w-[280px] md:min-w-[340px] md:w-[340px] shrink-0 bg-[#050505] border border-white/10 hover:border-white/30 transition-colors rounded-lg overflow-hidden flex flex-col cursor-pointer group/card">
                   <div className="relative h-[160px] w-full bg-[#0a0a0a]">
-                    <Image src={article.image} alt={article.title} fill className="object-cover opacity-80 group-hover/card:opacity-100 transition-opacity" />
+                    <Image src={article.image} alt={article.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover opacity-80 group-hover/card:opacity-100 transition-opacity" />
                   </div>
                   <div className="p-5 flex flex-col flex-1">
                     <h3 className="text-[11px] font-bold text-white leading-relaxed mb-4 line-clamp-2">
