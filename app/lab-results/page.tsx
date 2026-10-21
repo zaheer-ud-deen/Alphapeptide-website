@@ -7,7 +7,7 @@ import { Search, ChevronDown, ShieldCheck, FileText, ExternalLink, FlaskConical,
 // import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer'; 
 
-// Static Data for the COA Table (Added 2 more so the View More button shows up!)
+// Static Data for the COA Table
 const initialLots = [
   { lot: 'VP-183D5F7410', compound: 'BPC-157 / TB-500 Blend', dose: '—', purity: '99.84% HPLC', mw: '—', status: 'IN STOCK', pdf: '/BPC157TB500.pdf' },
   { lot: 'VP-3Q5S7UFA6', compound: 'CJC / Ipamorelin', dose: '—', purity: '99.22% HPLC', mw: '—', status: 'IN STOCK', pdf: '/sample-coa.pdf' },
@@ -25,24 +25,30 @@ const initialLots = [
 
 export default function LabResultsPage() {
   const [lots] = useState(initialLots);
-  const [visibleCount, setVisibleCount] = useState(10);
+  
+  // Desktop specific state (Shows 10, adds 5)
+  const [visibleDesktopCount, setVisibleDesktopCount] = useState(10);
+  const handleViewMoreDesktop = () => {
+    setVisibleDesktopCount((prev) => prev + 5);
+  };
 
-  const handleViewMore = () => {
-    setVisibleCount((prev) => prev + 5);
+  // Mobile specific state (Shows 3, adds 3)
+  const [visibleMobileCount, setVisibleMobileCount] = useState(3);
+  const handleViewMoreMobile = () => {
+    setVisibleMobileCount((prev) => prev + 3);
   };
 
   return (
     <div className="min-h-screen bg-[#030303] text-white flex flex-col">
       
-    
-{/* --- HERO SECTION --- */}
+      {/* --- HERO SECTION --- */}
       <div className="relative w-full bg-[#030303] flex flex-col">
         
         {/* Top Half: Split Content */}
         <div className="max-w-[1440px] mx-auto w-full flex flex-col lg:flex-row">
           
           {/* LEFT COLUMN: Headings and Search */}
-          <div className="w-full lg:w-[40%]  px-6 md:px-12 py-12 lg:py-8 flex flex-col justify-center">
+          <div className="w-full lg:w-[40%] px-6 md:px-12 py-12 lg:py-8 flex flex-col justify-center">
             
             <h1 className="text-[38] md:text-[50px] font-bold tracking-tight mb-2 leading-none">
               <span className="text-white">COA </span> <span className="text-[#B98135]"> ARCHIVE. </span>
@@ -82,23 +88,21 @@ export default function LabResultsPage() {
               </button>
             </div>
           </div>
-     {/* CUSTOM VERTICAL DIVIDER LINE */}
+          
+          {/* CUSTOM VERTICAL DIVIDER LINE */}
           <div className="hidden lg:block w-px bg-white/10 my-18 relative z-20"></div>
+          
           {/* RIGHT COLUMN: Background Image & 3rd Party Tested Badge */}
           <div className="w-full lg:w-[62%] relative flex items-center min-h-[250px] lg:min-h-full py-1 lg:py-20 border-t border-white/10 lg:border-t-0">
             
-            {/* Scoped Background Image - Fills the space and reaches closer to the text */}
             <div className="absolute inset-0 z-0 overflow-hidden">
               <Image 
                 src="/heroimg222.png" 
                 alt="COA Archive Background" 
                 fill 
                 sizes="(max-width: 768px) 100vw, 33vw"
-                 
-                className="object-contain object-center " 
+                className="object-contain object-center" 
               />
-              {/* Softer gradient so the image is visible all the way to the dividing line */}
-              {/* <div className="absolute inset-0 bg-gradient-to-r from-[#030303] via-[#030303]/30 to-transparent z-10"></div> */}
             </div>
 
             {/* Badge Content */}
@@ -148,9 +152,13 @@ export default function LabResultsPage() {
       </div>
       {/* --- END HERO SECTION --- */}
 
-      {/* --- COA TABLE SECTION --- */}
+      {/* --- COA SECTION --- */}
       <div className="flex-1 max-w-[1440px] w-full mx-auto px-6 md:px-12 py-12">
-        <div className="overflow-x-auto">
+        
+        {/* =========================================================
+            DESKTOP/LAPTOP TABLE VIEW (Hidden on Mobile) 
+        ========================================================= */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-white/10 text-[10px] font-semibold tracking-widest text-gray-500 uppercase">
@@ -164,13 +172,13 @@ export default function LabResultsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5 text-xs">
-              {lots.slice(0, visibleCount).map((item, index) => (
-                <tr key={index} className="hover:bg-white/[0.02] transition-colors">
+              {lots.slice(0, visibleDesktopCount).map((item, index) => (
+                <tr key={`desktop-${index}`} className="hover:bg-white/[0.02] transition-colors">
                   <td className="py-4 px-4 font-mono text-gray-300">{item.lot}</td>
                   <td className="py-4 px-4 font-medium text-white">{item.compound}</td>
                   <td className="py-4 px-4 text-gray-400">{item.dose}</td>
                   <td className="py-4 px-4 text-[#B98135] font-medium leading-tight">
-                    {item.purity.replace('HPLC', '')} <br className="hidden md:block" /> 
+                    {item.purity.replace('HPLC', '')} <br /> 
                     <span className="text-[10px] text-[#B98135]">HPLC</span>
                   </td>
                   <td className="py-4 px-4 text-gray-500">{item.mw}</td>
@@ -204,19 +212,87 @@ export default function LabResultsPage() {
               ))}
             </tbody>
           </table>
+
+          {/* DESKTOP VIEW MORE BUTTON */}
+          {visibleDesktopCount < lots.length && (
+            <div className="flex justify-center mt-12 mb-8">
+              <button 
+                onClick={handleViewMoreDesktop}
+                className="flex items-center gap-3 text-[13px] font-medium tracking-widest text-white hover:text-gray-300 transition-colors uppercase cursor-pointer"
+              >
+                VIEW MORE LOTS <ChevronDown size={20} className="text-[#B98135]" strokeWidth={2.5} />
+              </button>
+            </div>
+          )}
         </div>
 
-        {/* --- VIEW MORE LOTS BUTTON --- */}
-        {visibleCount < lots.length && (
-          <div className="flex justify-center mt-12 mb-8">
-            <button 
-              onClick={handleViewMore}
-              className="flex items-center gap-3 text-[13px] font-medium tracking-widest text-white hover:text-gray-300 transition-colors uppercase"
-            >
-              VIEW MORE LOTS <ChevronDown size={20} className="text-[#B98135]" strokeWidth={2.5} />
-            </button>
-          </div>
-        )}
+        {/* =========================================================
+            MOBILE CARD VIEW (Hidden on Desktop/Tablet) 
+        ========================================================= */}
+        <div className="md:hidden flex flex-col gap-4">
+          {lots.slice(0, visibleMobileCount).map((item, index) => (
+            <div key={`mobile-${index}`} className="bg-[#0a0a0a] border border-white/10 rounded-lg p-5 flex flex-col gap-4">
+              
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="text-white font-bold text-[15px] mb-1">{item.compound}</h3>
+                  <p className="text-xs text-gray-500 font-mono tracking-wide">Lot: {item.lot}</p>
+                </div>
+                <span className="inline-flex items-center gap-1.5 font-medium text-white text-[9px] tracking-widest uppercase bg-white/5 px-2.5 py-1.5 rounded shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  {item.status}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 text-xs border-y border-white/5 py-4 my-1">
+                <div>
+                  <p className="text-gray-500 text-[10px] uppercase tracking-widest mb-1">Dose</p>
+                  <p className="text-gray-300">{item.dose}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 text-[10px] uppercase tracking-widest mb-1">Purity</p>
+                  <p className="text-[#B98135] font-medium">{item.purity}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 text-[10px] uppercase tracking-widest mb-1">MW</p>
+                  <p className="text-gray-300">{item.mw}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between pt-1">
+                <Link 
+                  href="/shop" 
+                  className="text-[10px] font-bold tracking-widest text-[#B98135] hover:text-white transition-colors uppercase"
+                >
+                  SHOP →
+                </Link>
+                <a 
+                  href={item.pdf} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded border border-white/10 bg-black text-[10px] font-bold tracking-widest text-white hover:border-[#B98135] transition-colors uppercase"
+                >
+                  <ExternalLink size={12} className="text-white" />
+                  VIEW COA
+                </a>
+              </div>
+
+            </div>
+          ))}
+
+          {/* MOBILE VIEW MORE BUTTON */}
+          {visibleMobileCount < lots.length && (
+            <div className="flex justify-center mt-6 mb-4">
+              <button 
+                onClick={handleViewMoreMobile}
+                className="flex items-center gap-3 text-[13px] font-medium tracking-widest text-white hover:text-gray-300 transition-colors uppercase cursor-pointer"
+              >
+                VIEW MORE LOTS <ChevronDown size={20} className="text-[#B98135]" strokeWidth={2.5} />
+              </button>
+            </div>
+          )}
+        </div>
+
       </div>
 
       {/* --- FEATURE FOOTER BANNER --- */}

@@ -173,12 +173,14 @@ switch (slug) {
               </div>
 
               <a 
-                href={externalLink}
-                className="shrink-0 flex items-center gap-4 border border-yellow bg-transparent hover:bg-white/5 transition-all px-8 py-4 rounded-sm text-[11px] md:text-[13px] font-semibold tracking-widest uppercase text-white group"
-              >
-                READ RESEARCH OVERVIEW 
-                <ArrowUpRight size={18} className="text-white opacity-80 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-              </a>
+  href={externalLink}
+  target="_blank" 
+  rel="noopener noreferrer"
+  className="shrink-0 flex items-center gap-4 border border-yellow bg-transparent hover:bg-white/5 transition-all px-8 py-4 rounded-sm text-[11px] md:text-[13px] font-semibold tracking-widest uppercase text-white group"
+>
+  READ RESEARCH OVERVIEW 
+  <ArrowUpRight size={18} className="text-white opacity-80 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+</a>
             </div>
           </div>
         </div>

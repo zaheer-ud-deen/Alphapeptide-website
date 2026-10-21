@@ -4,6 +4,7 @@ import { X, Trash2, Plus, Minus, ShoppingCart, Lock, ShieldCheck, FlaskConical }
 import Image from 'next/image';
 import { useRouter } from 'next/navigation'; // <-- ADDED ROUTER
 import { useCart } from '../../context/CartContext';
+import { toast } from 'react-toastify';
 
 
 export default function CartDrawer() {
@@ -137,31 +138,39 @@ export default function CartDrawer() {
             )}
 
             {/* "You may also like..." Upsell Section */}
-            <div className="pt-6 mt-6 border-t border-white/10">
-              <h3 className="text-sm font-medium text-white mb-4">You may also like...</h3>
-              <div className="grid grid-cols-3 gap-3">
-                {upsellProducts.map((upsell, idx) => (
-                  <div key={idx} className="bg-[#0a0a0a] border border-white/10 rounded-lg p-3 flex flex-col items-center text-center">
-                    <div className="relative w-full h-20 mb-2">
-                      <Image src={upsell.image} alt={upsell.name} fill className="object-contain" />
-                    </div>
-                    <span className="text-[11px] font-medium text-white truncate w-full mb-0.5">{upsell.name}</span>
-                    <span className="text-[11px] text-gray-400 mb-2">{upsell.price}</span>
-                    <button 
-                      // <-- FIXED: Now passes the actual product details to the cart!
-                      onClick={() => addToCart({
-                        name: upsell.name,
-                        price: parseFloat(upsell.price.replace('$', '')),
-                        image: upsell.image
-                      })}
-                      className="w-full py-1 border border-[#B98135] text-[#B98135] hover:bg-[#B98135] hover:text-black text-[10px] uppercase font-semibold rounded transition-colors cursor-pointer"
-                    >
-                      Add
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
+           <div className="pt-6 mt-6 border-t border-white/10">
+  <h3 className="text-sm font-medium text-white mb-4">You may also like...</h3>
+  <div className="grid grid-cols-3 gap-3">
+    {upsellProducts.map((upsell, idx) => (
+      <div key={idx} className="bg-[#0a0a0a] border border-white/10 rounded-lg p-3 flex flex-col items-center text-center">
+        <div className="relative w-full h-20 mb-2">
+          <Image src={upsell.image} alt={upsell.name} fill className="object-contain" />
+        </div>
+        <span className="text-[11px] font-medium text-white truncate w-full mb-0.5">{upsell.name}</span>
+        <span className="text-[11px] text-gray-400 mb-2">{upsell.price}</span>
+        <button 
+          onClick={() => {
+            // 1. Add to cart
+            addToCart({
+              name: upsell.name,
+              price: parseFloat(upsell.price.replace('$', '')),
+              image: upsell.image
+            });
+            
+            // 2. Fire the toast notification
+            toast.success(`${upsell.name} added to cart!`, {
+              style: { border: '1px solid #B98135', backgroundColor: '#0a0a0a', color: 'white' },
+              icon: <span>🛒</span>,
+            });
+          }}
+          className="w-full py-1 border border-[#B98135] text-[#B98135] hover:bg-[#B98135] hover:text-black text-[10px] uppercase font-semibold rounded transition-colors cursor-pointer"
+        >
+          Add
+        </button>
+      </div>
+    ))}
+  </div>
+</div>
 
           </div>
 

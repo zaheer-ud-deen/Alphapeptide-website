@@ -100,10 +100,9 @@ export default function FAQPage() {
   return (
     <div className="min-h-screen bg-[#030303] text-white flex flex-col">
       
-
       {/* Hero Section */}
       <div className="relative w-full py-10 overflow-hidden bg-black flex flex-col justify-center">
-        <div className="max-w-[1440px] mx-auto w-full px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="max-w-[1440px] mx-auto w-full px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
           
           {/* Left Heading & Description */}
           <div className="relative z-20">
@@ -114,7 +113,7 @@ export default function FAQPage() {
             </div>
             
             <h1 className="text-4xl md:text-5xl lg:text-[56px] font-medium tracking-wide mb-4 leading-tight">
-              Frequently Asked<br/>Questions
+              Frequently Asked<br className="hidden md:block" /> Questions
             </h1>
             
             <p className="text-gray-400 text-sm max-w-md leading-relaxed">
@@ -124,14 +123,13 @@ export default function FAQPage() {
 
           {/* Right Hero Logo */}
           <div className="flex justify-center lg:justify-end items-start w-full relative z-20">
-            <div className="relative w-full max-w-[320px] h-[160px] lg:h-[200px] opacity-90">
+            <div className="relative w-full max-w-[200px] md:max-w-[320px] h-[100px] md:h-[160px] lg:h-[200px] opacity-90">
               <Image 
                 src="/heroLogo.png" 
                 alt="Alpha Peptide Hero Logo" 
                 fill 
                 sizes="(max-width: 768px) 100vw, 33vw"
-                className="object-contain object-right"
-                 
+                className="object-contain object-center lg:object-right"
               />
             </div>
           </div>
@@ -139,16 +137,18 @@ export default function FAQPage() {
       </div>
 
       {/* Main FAQ Content */}
-      <div className="flex-1 max-w-[1440px] w-full mx-auto px-6 md:px-12 py-12">
+      <div className="flex-1 max-w-[1440px] w-full mx-auto px-4 md:px-12 py-8 md:py-12">
         
-        <div className="max-w-[1200px] mx-auto  pl-14">
+        {/* Adjusted padding classes here: md:pl-14 applies only on desktop/laptop */}
+        <div className="max-w-[1200px] mx-auto md:pl-14">
+          
           {/* Category Tabs */}
-          <div className="flex flex-wrap items-center gap-3 mb-10">
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 md:gap-3 mb-8 md:mb-10">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => handleTabClick(cat)}
-                className={`px-4 py-4 text-[11px] font-medium tracking-widest uppercase rounded border transition-all duration-300 ${
+                className={`px-3 py-3 md:px-4 md:py-4 text-[10px] md:text-[11px] font-medium tracking-widest uppercase rounded border transition-all duration-300 ${
                   activeCategory === cat 
                     ? 'border-[#B98135] text-[#B98135] bg-[#B98135]/5' 
                     : 'border-white/10 text-gray-400 hover:border-white/30 hover:text-white'
@@ -160,7 +160,8 @@ export default function FAQPage() {
           </div>
 
           {/* Accordion List */}
-          <div className="space-y-3 mb-16 px-45 pl-12">
+          {/* Adjusted padding classes here: removed invalid px-45, restricted pl-12 to md:pl-12 */}
+          <div className="space-y-3 mb-12 md:mb-16 md:pr-4 md:pl-12">
             {faqData[activeCategory as keyof typeof faqData].map((faq, index) => {
               const isOpen = openIndex === index;
 
@@ -173,21 +174,21 @@ export default function FAQPage() {
                 >
                   <button
                     onClick={() => setOpenIndex(isOpen ? null : index)}
-                    className="w-full flex items-center justify-between p-5 text-left focus:outline-none"
+                    className="w-full flex items-center justify-between p-4 md:p-5 text-left focus:outline-none"
                   >
-                    <span className={`text-sm font-medium ${isOpen ? 'text-[#B98135]' : 'text-white'}`}>
+                    <span className={`text-xs md:text-sm font-medium pr-4 ${isOpen ? 'text-[#B98135]' : 'text-white'}`}>
                       {faq.q}
                     </span>
                     {isOpen ? (
-                      <ChevronUp size={18} className="text-[#B98135] shrink-0 ml-4" />
+                      <ChevronUp size={18} className="text-[#B98135] shrink-0" />
                     ) : (
-                      <ChevronDown size={18} className="text-gray-400 shrink-0 ml-4" />
+                      <ChevronDown size={18} className="text-gray-400 shrink-0" />
                     )}
                   </button>
                   
                   {isOpen && (
-                    <div className="px-5 pb-5">
-                      <p className="text-xs text-gray-400 leading-relaxed">
+                    <div className="px-4 md:px-5 pb-4 md:pb-5">
+                      <p className="text-[11px] md:text-xs text-gray-400 leading-relaxed">
                         {faq.a}
                       </p>
                     </div>
@@ -197,10 +198,10 @@ export default function FAQPage() {
             })}
           </div>
 
-     {/* Bottom Support Info Cards */}
-<div className="relative w-full">
-  <SupportInfoBar />
-</div>
+          {/* Bottom Support Info Cards */}
+          <div className="relative w-full">
+            <SupportInfoBar />
+          </div>
         </div>
 
       </div>

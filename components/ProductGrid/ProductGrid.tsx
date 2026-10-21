@@ -1,12 +1,16 @@
 'use client';
 
+import React, { useState } from 'react';
 import Image from 'next/image';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, ChevronUp } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { toast } from 'react-toastify';
 
 export default function ProductGrid() {
   const { addToCart } = useCart();
+  
+  // State to control mobile visibility of the last 2 products
+  const [isExpanded, setIsExpanded] = useState(false);
 
   // Function to handle the button click
   const handleAddToCart = (productName: string) => {
@@ -75,12 +79,17 @@ export default function ProductGrid() {
 
       {/* 2. Product Grid */}
       <div className="w-full max-w-[1440px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {products.map((product) => (
+        {products.map((product, index) => (
           
-          /* The "group" class here allows us to link the hover states of the card and button */
+          /* 
+             The "group" class here allows us to link the hover states of the card and button.
+             Added dynamic classes: hides items 3 & 4 on mobile unless expanded, always shows on sm+ 
+          */
           <div 
             key={product.id} 
-            className="group relative flex flex-col items-center p-4 rounded-lg border border-white/10 hover:border-[#B98135] transition-all duration-300 cursor-pointer bg-[#0a0a0a]"
+            className={`group relative flex-col items-center p-4 rounded-lg border border-white/10 hover:border-[#B98135] transition-all duration-300 cursor-pointer bg-[#0a0a0a] ${
+              !isExpanded && index >= 2 ? 'hidden sm:flex' : 'flex'
+            }`}
           >
             
             {/* Optional Best Seller Badge */}
@@ -105,7 +114,7 @@ export default function ProductGrid() {
             </div>
 
             {/* Product Details */}
-            <h3 className="text-lg md:text-s font-semibold text-white tracking-wide mb-1">
+            <h3 className="text-lg md:text-sm font-semibold text-white tracking-wide mb-1">
               {product.name}
             </h3>
             
@@ -115,13 +124,27 @@ export default function ProductGrid() {
 
              <button 
                 onClick={() => handleAddToCart(product.name)}
-                className=" cursor-pointer py-1 px-5 flex items-center justify-center gap-2 border border-[#B77D33] group-hover:border-[#B98135] group-hover:text-[#B98135] rounded-[4px] text-sm tracking-widest  transition-all duration-300"
->
+                className="cursor-pointer py-1 px-5 flex items-center justify-center gap-2 border border-[#B77D33] group-hover:border-[#B98135] group-hover:text-[#B98135] rounded-[4px] text-sm tracking-widest transition-all duration-300"
+              >
                  View Details <ArrowUpRight size={16} strokeWidth={1.5} />
             </button>
             
           </div>
         ))}
+      </div>
+
+      {/* 3. Mobile View Toggle Button (Hidden on sm screens and up) */}
+      <div className="w-full flex justify-center mt-8 sm:hidden">
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="flex items-center gap-2 text-gray-400 hover:text-[#B98135] transition-colors text-xs font-semibold tracking-widest uppercase cursor-pointer"
+        >
+          {isExpanded ? (
+            <>View Less <ChevronUp size={16} strokeWidth={2} /></>
+          ) : (
+            <>View All Products <ChevronDown size={16} strokeWidth={2} /></>
+          )}
+        </button>
       </div>
 
     </section>

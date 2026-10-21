@@ -52,6 +52,13 @@ export default function ShopGrid({ categorySlug = 'all' }: { categorySlug?: stri
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [activeSort, setActiveSort] = useState(sortOptions[0]);
   
+  // State for mobile incremental loading (starts at 3, adds 3 per click)
+  const [visibleMobileCount, setVisibleMobileCount] = useState(3);
+  
+  const handleViewMoreMobile = () => {
+    setVisibleMobileCount((prev) => prev + 3);
+  };
+
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -125,66 +132,82 @@ export default function ShopGrid({ categorySlug = 'all' }: { categorySlug?: stri
         {filteredProducts.length === 0 ? (
            <div className="py-20 text-center text-gray-500">No products found in this category.</div>
         ) : (
-          <div className={viewMode === 'grid' ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" : "flex flex-col gap-4"}>
-            {sortedProducts.map((product) => (
-              <div 
-                key={product.id} 
-                className={`group relative flex bg-[#0a0a0a] border border-white/10 rounded-lg overflow-hidden hover:border-[#B98135] transition-all duration-300 cursor-pointer ${viewMode === 'grid' ? 'flex-col items-center p-4' : 'flex-row items-center h-48 p-4'}`}
-              >
-                
-                {product.badge && (
-                  <div className="absolute top-4 left-4 border border-[#B98135] text-[#B98135] text-[9px] px-2 py-1 uppercase tracking-widest rounded-full font-medium z-50 pointer-events-none">
-                    {product.badge}
-                  </div>
-                )}
-
-                {/* Homepage-matched Image Area */}
-                <Link href={`/research-catalog/${product.categoryId}/${product.slug}`} className={`relative flex items-center justify-center ${viewMode === 'grid' ? 'w-full h-[250px] mb-3' : 'w-48 h-full border-r border-white/5'}`}>
-                  <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full blur-3xl pointer-events-none"></div>
-                  <Image 
-                    src={product.image} 
-                    alt={product.name} 
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    fill 
-                    className="object-contain relative z-10 mix-blend-lighten" 
-                  />
-                </Link>
-
-                {/* Product Details & Action */}
-                <div className={`flex flex-col ${viewMode === 'grid' ? 'w-full items-center text-center' : 'flex-grow p-6 justify-center'}`}>
-                  <Link href={`/research-catalog/${product.categoryId}/${product.slug}`}>
-                    <h3 className="text-lg font-semibold text-white tracking-wide mb-1 hover:text-[#B98135] transition-colors">
-                      {product.name}
-                    </h3>
-                  </Link>
+          <>
+            <div className={viewMode === 'grid' ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" : "flex flex-col gap-4"}>
+              {sortedProducts.map((product, index) => (
+                <div 
+                  key={product.id} 
+                  /* Hides items beyond visibleMobileCount on mobile, but forces flex on sm screens and up */
+                  className={`group relative bg-[#0a0a0a] border border-white/10 rounded-lg overflow-hidden hover:border-[#B98135] transition-all duration-300 cursor-pointer ${
+                    viewMode === 'grid' ? 'flex-col items-center p-4' : 'flex-row items-center h-48 p-4'
+                  } ${index >= visibleMobileCount ? 'hidden sm:flex' : 'flex'}`}
+                >
                   
-                  <p className="text-gray-400 text-sm mb-3">
-                    {product.price}
-                  </p>
+                  {product.badge && (
+                    <div className="absolute top-4 left-4 border border-[#B98135] text-[#B98135] text-[9px] px-2 py-1 uppercase tracking-widest rounded-full font-medium z-50 pointer-events-none">
+                      {product.badge}
+                    </div>
+                  )}
 
-                  <div className={viewMode === 'grid' ? 'w-full flex justify-center' : 'w-48'}>
-                    {product.status === 'available' ? (
-                      /* FIXED: Replaced button with Link for direct routing */
-                      <Link 
-                        href={`/research-catalog/${product.categoryId}/${product.slug}`}
-                        className="cursor-pointer py-1 px-5 flex items-center justify-center gap-2 border border-[#B77D33] group-hover:border-[#B98135] group-hover:text-[#B98135] rounded-[4px] text-sm tracking-widest transition-all duration-300 text-white"
-                      >
-                        View Details <ArrowUpRight size={16} strokeWidth={1.5} />
-                      </Link>
-                    ) : (
-                      <button disabled className="cursor-not-allowed py-1 px-5 flex items-center justify-center gap-2 border border-white/5 rounded-[4px] bg-[#030303]/50 text-gray-600 text-sm tracking-widest">
-                        <Clock size={14} /> Coming Soon
-                      </button>
-                    )}
+                  {/* Homepage-matched Image Area */}
+                  <Link href={`/research-catalog/${product.categoryId}/${product.slug}`} className={`relative flex items-center justify-center ${viewMode === 'grid' ? 'w-full h-[250px] mb-3' : 'w-48 h-full border-r border-white/5'}`}>
+                    <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full blur-3xl pointer-events-none"></div>
+                    <Image 
+                      src={product.image} 
+                      alt={product.name} 
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      fill 
+                      className="object-contain relative z-10 mix-blend-lighten" 
+                    />
+                  </Link>
+
+                  {/* Product Details & Action */}
+                  <div className={`flex flex-col ${viewMode === 'grid' ? 'w-full items-center text-center' : 'flex-grow p-6 justify-center'}`}>
+                    <Link href={`/research-catalog/${product.categoryId}/${product.slug}`}>
+                      <h3 className="text-lg font-semibold text-white tracking-wide mb-1 hover:text-[#B98135] transition-colors">
+                        {product.name}
+                      </h3>
+                    </Link>
+                    
+                    <p className="text-gray-400 text-sm mb-3">
+                      {product.price}
+                    </p>
+
+                    <div className={viewMode === 'grid' ? 'w-full flex justify-center' : 'w-48'}>
+                      {product.status === 'available' ? (
+                        <Link 
+                          href={`/research-catalog/${product.categoryId}/${product.slug}`}
+                          className="cursor-pointer py-1 px-5 flex items-center justify-center gap-2 border border-[#B77D33] group-hover:border-[#B98135] group-hover:text-[#B98135] rounded-[4px] text-sm tracking-widest transition-all duration-300 text-white"
+                        >
+                          View Details <ArrowUpRight size={16} strokeWidth={1.5} />
+                        </Link>
+                      ) : (
+                        <button disabled className="cursor-not-allowed py-1 px-5 flex items-center justify-center gap-2 border border-white/5 rounded-[4px] bg-[#030303]/50 text-gray-600 text-sm tracking-widest">
+                          <Clock size={14} /> Coming Soon
+                        </button>
+                      )}
+                    </div>
                   </div>
-                </div>
 
+                </div>
+              ))}
+            </div>
+
+            {/* Mobile "View More" Button (Hidden on sm screens and up) */}
+            {visibleMobileCount < sortedProducts.length && (
+              <div className="w-full flex justify-center mt-8 sm:hidden">
+                <button
+                  onClick={handleViewMoreMobile}
+                  className="flex items-center gap-2 text-gray-400 hover:text-[#B98135] transition-colors text-xs font-semibold tracking-widest uppercase cursor-pointer"
+                >
+                  VIEW MORE PRODUCTS <ChevronDown size={16} strokeWidth={2} />
+                </button>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
 
-        {/* --- PAGINATION --- */}
+        {/* --- PAGINATION (Desktop remains unchanged) --- */}
         <div className="flex items-center justify-center mt-16 pb-10">
           <div className="flex items-center gap-2">
             

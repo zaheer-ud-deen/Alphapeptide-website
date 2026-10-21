@@ -136,7 +136,7 @@ export default function Footer() {
 
         </div>
 
-        {/* Bottom Section */}
+       {/* Bottom Section */}
         <div className="pt-8 flex flex-col gap-6">
           
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -145,17 +145,23 @@ export default function Footer() {
             </p>
             
             <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-              {['Privacy Policy', 'Terms & Conditions', 'Research Standards', 'Disclaimer'].map((item) => (
+              {[
+                { name: 'Privacy Policy', href: '/privacy-policy' },
+                { name: 'Terms & Conditions', href: '/terms-and-conditions' },
+                { name: 'Research Standards', href: '/research-standards' },
+                { name: 'Disclaimer', href: '/disclaimer' }
+              ].map((item) => (
                 <Link 
-                  key={item} 
-                  href="#" 
+                  key={item.name} 
+                  href={item.href} 
                   className="text-gray-500 hover:text-gray-300 text-[12px] transition-colors"
                 >
-                  {item}
+                  {item.name}
                 </Link>
               ))}
             </div>
           </div>
+       
 
           <div className="flex items-start gap-2.5">
             <span className="text-[#C99441] text-[10px] mt-[3px]">●</span>

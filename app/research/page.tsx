@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useRef } from 'react';
-
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowUpRight, ChevronRight, ChevronLeft, FileText } from 'lucide-react';
@@ -68,8 +67,6 @@ export default function ResearchVaultPage() {
   return (
     <div className="min-h-screen bg-[#030303] text-white flex flex-col font-sans">
       
-   
-
       {/* Hero Section */}
       <div className="relative w-full py-20 md:py-16 overflow-hidden bg-black flex flex-col justify-center border-b border-white/5">
         <div className="absolute inset-0 z-0 pointer-events-none">
@@ -78,10 +75,8 @@ export default function ResearchVaultPage() {
             alt="Research Vault Background" 
             fill 
             sizes="(max-width: 768px) 100vw, 33vw"
-             
             className="object-cover object-center md:object-cover " 
           />
-          
         </div>
         
         <div className="max-w-[1440px] mx-auto relative z-20 w-full px-6 md:px-12 lg:px-16">
@@ -125,7 +120,7 @@ export default function ResearchVaultPage() {
           <div className="relative">
             <button 
               onClick={() => scrollContainer(libraryRef, 'left')}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 w-8 h-8 rounded-full border border-[#B98135]/50 bg-[#030303] flex items-center justify-center text-[#B98135] hover:bg-[#B98135] hover:text-white transition-colors cursor-pointer shadow-lg hidden md:flex opacity-0 group-hover:opacity-100"
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-1/2 z-10 w-8 h-8 rounded-full border border-[#B98135]/50 bg-[#030303] flex items-center justify-center text-[#B98135] hover:bg-[#B98135] hover:text-white transition-colors cursor-pointer shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100"
             >
               <ChevronLeft size={16} />
             </button>
@@ -156,13 +151,14 @@ export default function ResearchVaultPage() {
             
             <button 
               onClick={() => scrollContainer(libraryRef, 'right')}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 w-8 h-8 rounded-full border border-[#B98135]/50 bg-[#030303] flex items-center justify-center text-[#B98135] hover:bg-[#B98135] hover:text-white transition-colors cursor-pointer shadow-lg hidden md:flex opacity-0 group-hover:opacity-100"
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-1/2 z-10 w-8 h-8 rounded-full border border-[#B98135]/50 bg-[#030303] flex items-center justify-center text-[#B98135] hover:bg-[#B98135] hover:text-white transition-colors cursor-pointer shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100"
             >
               <ChevronRight size={16} />
             </button>
           </div>
         </section>
-     {/* Expanding the Vault */}
+
+        {/* Expanding the Vault */}
         <section className="relative group">
           <h2 className="text-xl md:text-[22px] font-medium tracking-wide mb-6">
             Expanding the Vault
@@ -171,7 +167,7 @@ export default function ResearchVaultPage() {
           <div className="relative">
              <button 
                onClick={() => scrollContainer(vaultRef, 'left')}
-               className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 w-8 h-8 rounded-full border border-[#B98135]/50 bg-[#030303] flex items-center justify-center text-[#B98135] hover:bg-[#B98135] hover:text-white transition-colors cursor-pointer shadow-lg hidden md:flex opacity-0 group-hover:opacity-100"
+               className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-1/2 z-10 w-8 h-8 rounded-full border border-[#B98135]/50 bg-[#030303] flex items-center justify-center text-[#B98135] hover:bg-[#B98135] hover:text-white transition-colors cursor-pointer shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100"
              >
               <ChevronLeft size={16} />
             </button>
@@ -201,7 +197,7 @@ export default function ResearchVaultPage() {
 
             <button 
               onClick={() => scrollContainer(vaultRef, 'right')}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 w-8 h-8 rounded-full border border-[#B98135]/50 bg-[#030303] flex items-center justify-center text-[#B98135] hover:bg-[#B98135] hover:text-white transition-colors cursor-pointer shadow-lg hidden md:flex opacity-0 group-hover:opacity-100"
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-1/2 z-10 w-8 h-8 rounded-full border border-[#B98135]/50 bg-[#030303] flex items-center justify-center text-[#B98135] hover:bg-[#B98135] hover:text-white transition-colors cursor-pointer shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100"
             >
               <ChevronRight size={16} />
             </button>
@@ -217,7 +213,7 @@ export default function ResearchVaultPage() {
           <div className="relative">
             <button 
               onClick={() => scrollContainer(articlesRef, 'left')}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 w-8 h-8 rounded-full border border-[#B98135]/50 bg-[#030303] flex items-center justify-center text-[#B98135] hover:bg-[#B98135] hover:text-white transition-colors cursor-pointer shadow-lg hidden md:flex opacity-0 group-hover:opacity-100"
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-1/2 z-10 w-8 h-8 rounded-full border border-[#B98135]/50 bg-[#030303] flex items-center justify-center text-[#B98135] hover:bg-[#B98135] hover:text-white transition-colors cursor-pointer shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100"
             >
               <ChevronLeft size={16} />
             </button>
@@ -250,7 +246,7 @@ export default function ResearchVaultPage() {
 
             <button 
               onClick={() => scrollContainer(articlesRef, 'right')}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 w-8 h-8 rounded-full border border-[#B98135]/50 bg-[#030303] flex items-center justify-center text-[#B98135] hover:bg-[#B98135] hover:text-white transition-colors cursor-pointer shadow-lg hidden md:flex opacity-0 group-hover:opacity-100"
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-1/2 z-10 w-8 h-8 rounded-full border border-[#B98135]/50 bg-[#030303] flex items-center justify-center text-[#B98135] hover:bg-[#B98135] hover:text-white transition-colors cursor-pointer shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100"
             >
               <ChevronRight size={16} />
             </button>

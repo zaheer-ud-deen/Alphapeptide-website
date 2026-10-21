@@ -1,12 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Image from 'next/image';
 import { 
   ArrowUpRight,
   Crosshair,
   BarChart2,
-  RefreshCw
+  RefreshCw,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 
 // Centralized data structure so you can easily update text and images later
@@ -127,6 +129,18 @@ const tabsData = [
 
 export default function CategoryTabs() {
   const [activeTab, setActiveTab] = useState(tabsData[0].id);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Function to handle horizontal scrolling
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const scrollAmount = 200; // Pixels to scroll per click
+      scrollRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   // Find the currently active data
   const currentData = tabsData.find(tab => tab.id === activeTab) || tabsData[0];
@@ -136,43 +150,66 @@ export default function CategoryTabs() {
       <div className="max-w-[1440px] mx-auto px-6 md:px-12">
         
         {/* TOP TABS NAVIGATION */}
-        <div className="flex overflow-x-auto no-scrollbar mb-6 lg:mb-1 cursor-pointer">
-          {/* Reduced gap sizes: gap-4 md:gap-6 lg:gap-8 */}
-          <div className="flex w-full min-w-max justify-start gap-4 md:gap-6 lg:gap-8 pb-px cursor-pointer">
-            {tabsData.map((tab) => {
-              const isActive = activeTab === tab.id;
-              
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex flex-col items-center gap-3 pb-4 px-2 md:px-3 transition-all duration-300 border-b-2 ${
-                    isActive 
-                      ? 'border-[#B98135] text-[#B98135]' 
-                      : 'border-transparent text-gray-400 hover:text-white'
-                  }`}
-                >
-                  {/* Custom Image Icon with brighter default state (opacity-75 instead of opacity-40) */}
-                  <div className={`relative w-8 h-8 md:w-9 md:h-9 transition-opacity duration-300 ${isActive ? 'opacity-100' : 'opacity-75 hover:opacity-100'}`}>
-                    <Image 
-                      src={tab.iconSrc} 
-                      alt={`${tab.label} Icon`}
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
+        <div className="relative flex items-center mb-6 lg:mb-1">
+          
+          {/* Left Chevron (Visible only on mobile) */}
+          <button 
+            onClick={() => scroll('left')}
+            className="md:hidden absolute left-[-24px] z-10 h-full flex items-center justify-center bg-gradient-to-r from-[#030303] via-[#030303] to-transparent pr-4 pl-2 text-gray-400 hover:text-white"
+          >
+            <ChevronLeft size={24} />
+          </button>
 
-                  <span className={`cursor-pointer text-[10px] md:text-xs font-medium tracking-wide text-center uppercase ${isActive ? 'text-[#B98135]' : ''}`}>
-                    {tab.label.split(' ').map((word, i) => (
-                      <React.Fragment key={i}>
-                        {word}<br className="hidden sm:block" />
-                      </React.Fragment>
-                    ))}
-                  </span>
-                </button>
-              );
-            })}
+          {/* Scrollable Container */}
+          <div 
+            ref={scrollRef} 
+            className="flex overflow-x-auto no-scrollbar w-full cursor-pointer scroll-smooth"
+          >
+            <div className="flex w-full min-w-max justify-start gap-4 md:gap-6 lg:gap-8 pb-px px-6 md:px-0">
+              {tabsData.map((tab) => {
+                const isActive = activeTab === tab.id;
+                
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex flex-col items-center gap-3 pb-4 px-2 md:px-3 transition-all duration-300 border-b-2 ${
+                      isActive 
+                        ? 'border-[#B98135] text-[#B98135]' 
+                        : 'border-transparent text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    {/* Custom Image Icon with brighter default state (opacity-75 instead of opacity-40) */}
+                    <div className={`relative w-8 h-8 md:w-9 md:h-9 transition-opacity duration-300 ${isActive ? 'opacity-100' : 'opacity-75 hover:opacity-100'}`}>
+                      <Image 
+                        src={tab.iconSrc} 
+                        alt={`${tab.label} Icon`}
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
+
+                    <span className={`cursor-pointer text-[10px] md:text-xs font-medium tracking-wide text-center uppercase ${isActive ? 'text-[#B98135]' : ''}`}>
+                      {tab.label.split(' ').map((word, i) => (
+                        <React.Fragment key={i}>
+                          {word}<br className="hidden sm:block" />
+                        </React.Fragment>
+                      ))}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
+
+          {/* Right Chevron (Visible only on mobile) */}
+          <button 
+            onClick={() => scroll('right')}
+            className="md:hidden absolute right-[-24px] z-10 h-full flex items-center justify-center bg-gradient-to-l from-[#030303] via-[#030303] to-transparent pl-4 pr-2 text-gray-400 hover:text-white"
+          >
+            <ChevronRight size={24} />
+          </button>
+
         </div>
 
         {/* CONTENT AREA */}
@@ -181,7 +218,6 @@ export default function CategoryTabs() {
           {/* Left Text Column */}
           <div className="flex flex-col justify-center animate-in fade-in slide-in-from-left-4 duration-500" key={currentData.id}>
             
-            {/* Reduced heading size to match the design (text-3xl md:text-4xl lg:text-[40px]) */}
             <h2 className="text-3xl md:text-4xl lg:text-[40px] font-medium leading-tight mb-5 tracking-wide">
               <span className="text-white block">{currentData.titleWhite}</span>
               <span className="text-[#B98135] block">{currentData.titleGold}</span>
@@ -226,7 +262,6 @@ export default function CategoryTabs() {
             <Image 
               src={currentData.imageSrc} 
               alt={currentData.label} 
-             
               fill
               className="object-contain object-center drop-shadow-2xl z-10"
               sizes="(max-width: 1024px) 100vw, 50vw"
