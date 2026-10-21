@@ -143,8 +143,6 @@ export default function CheckoutHero({ currentStep }: CheckoutHeroProps) {
                   )}
 
 
-                  
-
                   {/* Right Dot (Hidden on last step) */}
                   {index < steps.length - 1 && (
                     <div className={`absolute top-1/2 -translate-y-1/2 -right-[5px] w-[5px] h-[5px] rounded-full ${isActive || isCompleted ? 'bg-[#B98135]' : 'bg-white'}`}></div>
