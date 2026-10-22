@@ -16,7 +16,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
       <main className="flex-grow">
         <ShopHero initialCategory={categorySlug} />
         <ShopGrid categorySlug={categorySlug} />
-        <div className="relative w-full px-112">
+        <div className="relative w-full px-12">
           <SupportInfoBar />
         </div>
       </main>
