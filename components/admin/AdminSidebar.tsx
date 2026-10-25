@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, FlaskConical, Package, MessageCircleQuestion, Lock, Settings } from 'lucide-react';
+import { LayoutDashboard, FlaskConical, Package, MessageCircleQuestion, Lock, Settings,FileSignature } from 'lucide-react';
 
 export default function AdminSidebar() {
   const pathname = usePathname();
@@ -10,6 +10,7 @@ export default function AdminSidebar() {
     { name: 'Overview', href: '/admin', icon: LayoutDashboard },
     { name: 'Products', href: '/admin/products', icon: FlaskConical },
     { name: 'Orders', href: '/admin/orders', icon: Package, badge: '12' },
+    { name: 'Lab Results', href: '/admin/lab-results', icon: FileSignature }, // NEW
     { name: 'FAQs', href: '/admin/faqs', icon: MessageCircleQuestion },
     { name: 'Research Vault', href: '/admin/research', icon: Lock },
     { name: 'Settings', href: '/admin/settings', icon: Settings },
